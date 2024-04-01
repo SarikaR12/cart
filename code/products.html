@@ -938,7 +938,7 @@
                                 </div>
                                 <div class="cart position-absolute">
                                     <span onclick="cartdata(${ind})"><i class="fa-solid fa-cart-plus fs-4"></i></span>
-                                    <span id="num${ind}">0</span>
+                                    <span id="num${ind}"></span>
                                 </div>
                                 <div class="bag-card">
                                     <div class="dot d-flex justify-content-center ">
@@ -983,8 +983,11 @@
 
             for (let i = 0; i < cart.length; i++) {
                 if (cart[i].Image === products.Image) {
-                    cart[i].quantity = (cart[i].quantity || 0) + 1;
-                    document.getElementById(`num${ind}`).innerHTML = cart[i].quantity;
+                    if ((cart[i].quantity) < 10) {
+                        cart[i].quantity = (cart[i].quantity || 0) + 1;
+                    } else {
+                        alert("Maximum quantity reached for this product!");
+                    }
                     found = true;
                     break;
                 }
@@ -993,32 +996,25 @@
             if (!found) {
                 products.quantity = 1;
                 cart.push(products);
-                document.getElementById(`num${ind}`).innerHTML = 1;
             }
             location.reload()
 
             localStorage.setItem("cart", JSON.stringify(cart));
-            updateCartCount(); 
+            updateCartCount();
         };
 
         window.onload = () => {
             cart.forEach((item, index) => {
                 let num = document.getElementById(`num${index}`);
                 if (num) {
-                    let numb=num.innerHTML = item.quantity || 0;
+                    let numb = num.innerHTML;
                     let price = item.quantity * item.price;
                     localStorage.setItem(`num${index}`, JSON.stringify(item.quantity))
-                    localStorage.setItem(`price${index}`,JSON.stringify(price));
-                    console.log(price);
-                    console.log(numb);
+                    localStorage.setItem(`price${index}`, JSON.stringify(price));
                 }
             });
-            updateCartCount();
         };
-
-        function updateCartCount() {
-            document.getElementById("count").innerHTML = cart.length;
-        }
+        document.getElementById("count").innerHTML = cart.length;
 
 
     </script>
